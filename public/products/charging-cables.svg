@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="Charging cable">
+  <rect width="900" height="900" fill="#EAF0FF"/>
+  <g fill="none" stroke="#2E6BFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M250 250 C 250 470, 650 430, 650 650" />
+    <rect x="212" y="150" width="76" height="120" rx="24" fill="#2E6BFF"/>
+    <rect x="612" y="630" width="76" height="130" rx="20" fill="#fff" stroke="#2E6BFF"/>
+    <line x1="632" y1="668" x2="632" y2="722"/>
+    <line x1="668" y1="668" x2="668" y2="722"/>
+  </g>
+  <text x="450" y="830" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="600" fill="#5B6675">ProHub Charging Cable</text>
+</svg>

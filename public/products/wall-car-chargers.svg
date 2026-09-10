@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="Wall charger">
+  <rect width="900" height="900" fill="#EAF0FF"/>
+  <g stroke="#2E6BFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="315" y="330" width="270" height="300" rx="48" fill="#fff"/>
+    <line x1="385" y1="270" x2="385" y2="330" stroke-width="30"/>
+    <line x1="515" y1="270" x2="515" y2="330" stroke-width="30"/>
+    <rect x="418" y="560" width="64" height="26" rx="13" fill="#2E6BFF" stroke="none"/>
+  </g>
+  <text x="450" y="760" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="600" fill="#5B6675">ProHub Charger</text>
+</svg>

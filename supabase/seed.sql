@@ -50,18 +50,16 @@ on conflict (slug) do nothing;
 -- (free stock imagery; replace with your own product photography before launch).
 insert into product_images (product_id, url, alt, sort_order)
 select p.id,
-       'https://loremflickr.com/900/900/' ||
-         case c.slug
-           when 'charging-cables'    then 'usb,cable'
-           when 'wall-car-chargers'  then 'charger,adapter'
-           when 'power-banks'        then 'powerbank,battery'
-           when 'audio'              then 'headphones,earbuds'
-           when 'mounts-holders'     then 'phone,stand'
-           when 'hubs-adapters'      then 'usb,adapter'
-           when 'smart-accessories'  then 'gadget,electronics'
-           else 'technology'
-         end ||
-         '?lock=' || (abs(hashtext(p.slug)) % 5000),
+       case c.slug
+         when 'charging-cables'    then '/products/charging-cables.svg'
+         when 'wall-car-chargers'  then '/products/wall-car-chargers.svg'
+         when 'power-banks'        then '/products/power-banks.svg'
+         when 'audio'              then '/products/audio.svg'
+         when 'mounts-holders'     then '/products/mounts-holders.svg'
+         when 'hubs-adapters'      then '/products/hubs-adapters.svg'
+         when 'smart-accessories'  then '/products/smart-accessories.svg'
+         else '/placeholder.svg'
+       end,
        p.title || ' product photo',
        0
 from products p

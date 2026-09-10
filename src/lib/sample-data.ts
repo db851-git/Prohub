@@ -15,29 +15,24 @@ export const sampleCategories: Category[] = [
   { id: "c7", name: "Smart Accessories", slug: "smart-accessories", description: "Smart gadgets that make life easier.", image_url: null, sort_order: 7 },
 ];
 
-// Category-specific search keywords so each product gets a relevant photo.
-const CATEGORY_KEYWORDS: Record<string, string> = {
-  "charging-cables": "usb,cable",
-  "wall-car-chargers": "charger,adapter",
-  "power-banks": "powerbank,battery",
-  audio: "headphones,earbuds",
-  "mounts-holders": "phone,stand",
-  "hubs-adapters": "usb,adapter",
-  "smart-accessories": "gadget,electronics",
-};
+// Category-matched illustration, shipped in /public/products so it always loads
+// and always matches the product type. Swap for your own product photography
+// (see README) by putting real image URLs on the products' product_images rows.
+const KNOWN_CATEGORY_SLUGS = new Set([
+  "charging-cables",
+  "wall-car-chargers",
+  "power-banks",
+  "audio",
+  "mounts-holders",
+  "hubs-adapters",
+  "smart-accessories",
+]);
 
-// Stable per-slug number so every product gets a different — but consistent — photo.
-function slugLock(slug: string) {
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  return h % 5000;
-}
-
-// A real, relevant, distinct placeholder photo per product (free to use).
-// Swap these for your own product photography before launch.
-export function imageForProduct(slug: string, categorySlug: string | null) {
-  const kw = (categorySlug && CATEGORY_KEYWORDS[categorySlug]) || "technology";
-  return `https://loremflickr.com/900/900/${kw}?lock=${slugLock(slug)}`;
+export function imageForProduct(_slug: string, categorySlug: string | null) {
+  const cat = categorySlug && KNOWN_CATEGORY_SLUGS.has(categorySlug)
+    ? categorySlug
+    : null;
+  return cat ? `/products/${cat}.svg` : "/placeholder.svg";
 }
 
 function img(seed: string, alt: string, url: string) {

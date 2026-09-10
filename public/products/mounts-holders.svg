@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="Phone stand">
+  <rect width="900" height="900" fill="#EAF0FF"/>
+  <g stroke="#2E6BFF" stroke-width="26" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="360" y="210" width="180" height="330" rx="30" fill="#fff"/>
+    <line x1="410" y1="270" x2="490" y2="270"/>
+    <path d="M330 560 h240 l40 120 h-320 z" fill="#2E6BFF" stroke="none"/>
+    <line x1="450" y1="540" x2="450" y2="600" stroke="#EAF0FF"/>
+  </g>
+  <text x="450" y="770" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="600" fill="#5B6675">ProHub Mount</text>
+</svg>

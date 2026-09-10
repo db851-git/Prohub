@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="Smart accessory">
+  <rect width="900" height="900" fill="#EAF0FF"/>
+  <g stroke="#2E6BFF" stroke-width="26" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="340" y="300" width="220" height="220" rx="52" fill="#fff"/>
+    <circle cx="450" cy="410" r="52" fill="none"/>
+    <line x1="450" y1="300" x2="450" y2="250"/>
+    <line x1="450" y1="520" x2="450" y2="570"/>
+  </g>
+  <path d="M640 250 l14 40 40 14 -40 14 -14 40 -14 -40 -40 -14 40 -14 z" fill="#2E6BFF"/>
+  <text x="450" y="720" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="600" fill="#5B6675">ProHub Smart Accessory</text>
+</svg>

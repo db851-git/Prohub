@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="USB hub">
+  <rect width="900" height="900" fill="#EAF0FF"/>
+  <g stroke="#2E6BFF" stroke-width="24" stroke-linejoin="round">
+    <rect x="250" y="390" width="400" height="120" rx="40" fill="#fff"/>
+    <rect x="290" y="430" width="70" height="40" rx="8" fill="#2E6BFF" stroke="none"/>
+    <rect x="415" y="430" width="70" height="40" rx="8" fill="#2E6BFF" stroke="none"/>
+    <rect x="540" y="430" width="70" height="40" rx="8" fill="#2E6BFF" stroke="none"/>
+    <path d="M650 450 h70" stroke-width="26" stroke-linecap="round"/>
+    <rect x="720" y="420" width="60" height="60" rx="12" fill="#2E6BFF" stroke="none"/>
+  </g>
+  <text x="450" y="720" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="600" fill="#5B6675">ProHub Hub &amp; Adapter</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="Headphones">
+  <rect width="900" height="900" fill="#EAF0FF"/>
+  <g fill="none" stroke="#2E6BFF" stroke-width="28" stroke-linecap="round">
+    <path d="M270 470 v-20 a180 180 0 0 1 360 0 v20"/>
+    <rect x="238" y="450" width="86" height="160" rx="34" fill="#2E6BFF"/>
+    <rect x="576" y="450" width="86" height="160" rx="34" fill="#2E6BFF"/>
+  </g>
+  <text x="450" y="770" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="600" fill="#5B6675">ProHub Audio</text>
+</svg>
