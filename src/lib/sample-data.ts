@@ -15,24 +15,62 @@ export const sampleCategories: Category[] = [
   { id: "c7", name: "Smart Accessories", slug: "smart-accessories", description: "Smart gadgets that make life easier.", image_url: null, sort_order: 7 },
 ];
 
-// Category-matched illustration, shipped in /public/products so it always loads
-// and always matches the product type. Swap for your own product photography
-// (see README) by putting real image URLs on the products' product_images rows.
-const KNOWN_CATEGORY_SLUGS = new Set([
-  "charging-cables",
-  "wall-car-chargers",
-  "power-banks",
-  "audio",
-  "mounts-holders",
-  "hubs-adapters",
-  "smart-accessories",
-]);
+// Real, category-matched product photos from Monarch Gadgets' own store CDN.
+// Several per category so products don't all repeat the same image.
+const CDN = "https://cdn.shopify.com/s/files/1/2220/0245";
+const MONARCH_IMAGES: Record<string, string[]> = {
+  "charging-cables": [
+    `${CDN}/files/Z-SERIESUSB-CTOUSB-C1.2M.png?v=1690885714`,
+    `${CDN}/files/1.2A-C.png?v=1691395700`,
+    `${CDN}/files/Z-SERIESUSB-CTOIPHONE1.2M.png?v=1690885758`,
+    `${CDN}/files/2mA-C.png?v=1691401185`,
+  ],
+  "wall-car-chargers": [
+    `${CDN}/files/G453CC-01_6.png?v=1701423026`,
+    `${CDN}/files/G303CA-01_6.png?v=1701423670`,
+    `${CDN}/files/TP205CQ-01_6.png?v=1701422712`,
+    `${CDN}/files/PD30_aa1f361e-34da-4f59-b40d-1e924c6e0b6a.png?v=1690807608`,
+  ],
+  "power-banks": [
+    `${CDN}/files/1031.839.png?v=1690798249`,
+    `${CDN}/files/Image_20230802174933.jpg?v=1690980750`,
+    `${CDN}/files/Image_20230802161901.jpg?v=1690975794`,
+    `${CDN}/files/Image_20230802162041.jpg?v=1690974880`,
+  ],
+  audio: [
+    `${CDN}/files/T90.jpg?v=1690184652`,
+    `${CDN}/files/Image_20230803153929.png?v=1691059342`,
+    `${CDN}/products/H3.png?v=1652159827`,
+    `${CDN}/products/lADPBbCc1UCLFxzNEsDNF3A_6000_4800.jpg?v=1571712841`,
+  ],
+  "mounts-holders": [
+    `${CDN}/files/CarMount304.jpg?v=1690546193`,
+    `${CDN}/files/C9-F6.374.png?v=1690540986`,
+    `${CDN}/products/14.png?v=1652159093`,
+    `${CDN}/products/819BK_10.jpg?v=1571712841`,
+  ],
+  "hubs-adapters": [
+    `${CDN}/files/Image_20230707143728.jpg?v=1690277562`,
+    `${CDN}/products/06_2fbf809b-a6b9-4d73-a6e5-cc0d83e0c679.png?v=1652159178`,
+    `${CDN}/products/J1_3.png?v=1652159189`,
+    `${CDN}/products/03_3b85ebc4-54a4-4deb-a1f7-149cff003614.png?v=1652159193`,
+  ],
+  "smart-accessories": [
+    `${CDN}/files/wirelessDoorBellb.png?v=1691481136`,
+    `${CDN}/files/1.jpg?v=1691058488`,
+    `${CDN}/files/smaeartwatchwithusb-C.jpg?v=1691489064`,
+    `${CDN}/products/IMG-20170504-WA0007.jpg?v=1571712839`,
+  ],
+};
+
+const categoryCounters: Record<string, number> = {};
 
 export function imageForProduct(_slug: string, categorySlug: string | null) {
-  const cat = categorySlug && KNOWN_CATEGORY_SLUGS.has(categorySlug)
-    ? categorySlug
-    : null;
-  return cat ? `/products/${cat}.svg` : "/placeholder.svg";
+  const pool = categorySlug ? MONARCH_IMAGES[categorySlug] : null;
+  if (!pool || pool.length === 0) return "/placeholder.svg";
+  const i = categoryCounters[categorySlug!] ?? 0;
+  categoryCounters[categorySlug!] = i + 1;
+  return pool[i % pool.length];
 }
 
 function img(seed: string, alt: string, url: string) {
