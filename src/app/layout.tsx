@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { getProducts } from "@/lib/data";
 import { BRAND } from "@/lib/constants";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora", display: "swap" });
@@ -46,6 +47,7 @@ export default async function RootLayout({
     <html lang="en-GB" className={`${inter.variable} ${sora.variable}`}>
       <body className="font-sans">
         <SiteChrome products={products}>{children}</SiteChrome>
+        <SpeedInsights />
       </body>
     </html>
   );
