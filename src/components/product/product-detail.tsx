@@ -111,6 +111,9 @@ export function ProductDetail({ product }: { product: Product }) {
             <img
               src={images[active].url}
               alt={images[active].alt ?? product.title}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+              }}
               className="aspect-square w-full object-cover"
             />
           </div>

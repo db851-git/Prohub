@@ -35,6 +35,10 @@ export function ProductCard({ product }: { product: Product }) {
         <img
           src={image}
           alt={product.product_images?.[0]?.alt ?? product.title}
+          loading="lazy"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+          }}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute left-3 top-3 flex gap-1.5">

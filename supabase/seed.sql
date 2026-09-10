@@ -46,11 +46,24 @@ values
   ('Smart Wi-Fi Plug (2-Pack)', 'smart-wi-fi-plug-2-pack', 'Control your devices from your phone.', '{"Connectivity":"Wi-Fi","Pack":"2","Warranty":"2 years"}', (select id from categories where slug='smart-accessories'), 21.99, null, 'WIFIPLUG2', 70, false, false, false, 4.5, 82)
 on conflict (slug) do nothing;
 
--- PRODUCT IMAGES (one placeholder per product — replace with your own photography)
+-- PRODUCT IMAGES — a distinct, category-relevant placeholder photo per product
+-- (free stock imagery; replace with your own product photography before launch).
 insert into product_images (product_id, url, alt, sort_order)
 select p.id,
-       'https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?auto=format&fit=crop&w=900&q=80',
+       'https://loremflickr.com/900/900/' ||
+         case c.slug
+           when 'charging-cables'    then 'usb,cable'
+           when 'wall-car-chargers'  then 'charger,adapter'
+           when 'power-banks'        then 'powerbank,battery'
+           when 'audio'              then 'headphones,earbuds'
+           when 'mounts-holders'     then 'phone,stand'
+           when 'hubs-adapters'      then 'usb,adapter'
+           when 'smart-accessories'  then 'gadget,electronics'
+           else 'technology'
+         end ||
+         '?lock=' || (abs(hashtext(p.slug)) % 5000),
        p.title || ' product photo',
        0
 from products p
+left join categories c on c.id = p.category_id
 where not exists (select 1 from product_images pi where pi.product_id = p.id);

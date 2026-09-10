@@ -15,14 +15,33 @@ export const sampleCategories: Category[] = [
   { id: "c7", name: "Smart Accessories", slug: "smart-accessories", description: "Smart gadgets that make life easier.", image_url: null, sort_order: 7 },
 ];
 
-function img(seed: string, alt: string) {
-  return {
-    id: `img-${seed}`,
-    product_id: seed,
-    url: `https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?auto=format&fit=crop&w=900&q=80`,
-    alt,
-    sort_order: 0,
-  };
+// Category-specific search keywords so each product gets a relevant photo.
+const CATEGORY_KEYWORDS: Record<string, string> = {
+  "charging-cables": "usb,cable",
+  "wall-car-chargers": "charger,adapter",
+  "power-banks": "powerbank,battery",
+  audio: "headphones,earbuds",
+  "mounts-holders": "phone,stand",
+  "hubs-adapters": "usb,adapter",
+  "smart-accessories": "gadget,electronics",
+};
+
+// Stable per-slug number so every product gets a different — but consistent — photo.
+function slugLock(slug: string) {
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return h % 5000;
+}
+
+// A real, relevant, distinct placeholder photo per product (free to use).
+// Swap these for your own product photography before launch.
+export function imageForProduct(slug: string, categorySlug: string | null) {
+  const kw = (categorySlug && CATEGORY_KEYWORDS[categorySlug]) || "technology";
+  return `https://loremflickr.com/900/900/${kw}?lock=${slugLock(slug)}`;
+}
+
+function img(seed: string, alt: string, url: string) {
+  return { id: `img-${seed}`, product_id: seed, url, alt, sort_order: 0 };
 }
 
 type P = Omit<Product, "in_stock" | "product_images"> & { catSlug: string };
@@ -91,13 +110,17 @@ function mk(
 }
 
 export const sampleProducts: Product[] = raw.map((p) => {
-  const category = sampleCategories.find((c) => c.slug === p.catSlug) ?? null;
+  // `p.catSlug` holds the category id ("c1"…"c7"); match on id.
+  const category =
+    sampleCategories.find((c) => c.id === p.catSlug || c.slug === p.catSlug) ?? null;
   return {
     ...p,
     category_id: category?.id ?? null,
     category,
     in_stock: p.stock > 0,
-    product_images: [img(p.id, `${p.title} product photo`)],
+    product_images: [
+      img(p.id, `${p.title} product photo`, imageForProduct(p.slug, category?.slug ?? null)),
+    ],
     product_variants: [],
   };
 });
