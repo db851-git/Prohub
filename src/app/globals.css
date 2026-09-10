@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --surface: #f6f7f9;
+  --ink: #0b0f14;
+  --muted: #5b6675;
+  --brand: #2e6bff;
+  --brand-soft: #eaf0ff;
+  --success: #12b76a;
+  --sale: #e5484d;
+  --border: #e7eaee;
+  --dark: #0b0f14;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-sora), system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .section {
+    @apply py-16 md:py-24;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.15em] text-brand;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
