@@ -1,102 +1,156 @@
--- ProHub Technologies — seed data
--- Run AFTER schema.sql (and rls.sql). Safe to re-run: conflicts are ignored.
+-- ProHub — seed data (real Monarch Gadgets catalogue, 65 products).
+-- Generated from src/lib/monarch-catalogue.json. Run AFTER schema.sql and rls.sql.
+-- Safe to re-run: conflicts are ignored.
 
--- CATEGORIES
 insert into categories (name, slug, description, sort_order) values
   ('Charging Cables', 'charging-cables', 'Fast, braided and durable cables for every device.', 1),
-  ('Wall & Car Chargers', 'wall-car-chargers', 'GaN wall chargers and car adapters that charge fast and stay cool.', 2),
+  ('Wall & Car Chargers', 'wall-car-chargers', 'GaN wall chargers, car adapters and wireless pads that charge fast and stay cool.', 2),
   ('Power Banks', 'power-banks', 'Portable power for phones, tablets and laptops.', 3),
-  ('Audio', 'audio', 'Speakers and earphones tuned for everyday listening.', 4),
+  ('Audio', 'audio', 'Speakers, earbuds and headphones tuned for everyday listening.', 4),
   ('Mounts & Holders', 'mounts-holders', 'Keep your devices steady at the desk and on the road.', 5),
   ('Hubs & Adapters', 'hubs-adapters', 'Expand your ports and connect everything.', 6),
-  ('Smart Accessories', 'smart-accessories', 'Smart gadgets that make life easier.', 7)
+  ('Smart Accessories', 'smart-accessories', 'Smart gadgets and handy extras that make life easier.', 7)
 on conflict (slug) do nothing;
 
--- PRODUCTS
--- helper: category_id via subselect on slug
-insert into products (title, slug, description, specifications, category_id, price, compare_at_price, sku, stock, is_new, is_bestseller, is_featured, rating, review_count)
+insert into products
+  (title, slug, description, specifications, category_id, brand, price, compare_at_price,
+   currency, sku, stock, is_new, is_bestseller, is_featured, rating, review_count)
 values
-  ('USB-C to USB-C 100W Cable 2m', 'usb-c-to-usb-c-100w-cable-2m', 'Charge laptops and phones at full speed with this 100W rated 2m cable.', '{"Power":"100W","Length":"2m","Connector":"USB-C to USB-C","Warranty":"2 years"}', (select id from categories where slug='charging-cables'), 14.99, 19.99, 'USBC100W2M', 120, false, true, false, 4.7, 214),
-  ('Lightning to USB-C Fast Cable 1.2m', 'lightning-to-usb-c-fast-cable-1-2m', 'Fast, MFi-style charging for iPhone with a durable 1.2m cable.', '{"Length":"1.2m","Connector":"Lightning to USB-C","Warranty":"2 years"}', (select id from categories where slug='charging-cables'), 12.99, null, 'LTGC12M', 80, true, false, false, 4.6, 98),
-  ('Braided USB-C to USB-A 1m', 'braided-usb-c-to-usb-a-1m', 'Everyday braided cable built to last.', '{"Length":"1m","Connector":"USB-C to USB-A","Warranty":"2 years"}', (select id from categories where slug='charging-cables'), 7.99, 9.99, 'BRCA1M', 200, false, false, false, 4.5, 320),
-  ('Nylon USB-C to USB-C 0.3m (2-Pack)', 'nylon-usb-c-to-usb-c-0-3m-2-pack', 'Short cables, perfect for power banks and travel. Two in a pack.', '{"Length":"0.3m","Pack":"2","Warranty":"2 years"}', (select id from categories where slug='charging-cables'), 9.99, null, 'NYLC03M2', 0, false, false, false, 4.4, 60),
-  ('20W USB-C Wall Charger (UK)', '20w-usb-c-wall-charger-uk', 'Compact 20W fast charger with a UK plug.', '{"Power":"20W","Ports":"1x USB-C","Plug":"UK","Warranty":"2 years"}', (select id from categories where slug='wall-car-chargers'), 16.99, null, 'WC20WUK', 150, false, true, false, 4.7, 180),
-  ('65W GaN Dual-Port Charger', '65w-gan-dual-port-charger', 'Tiny GaN charger that powers a laptop and phone at once.', '{"Power":"65W","Ports":"USB-C + USB-A","Tech":"GaN","Warranty":"2 years"}', (select id from categories where slug='wall-car-chargers'), 39.99, 49.99, 'GAN65W', 60, true, false, true, 4.8, 142),
-  ('3.4A Dual Car Charger', '3-4a-dual-car-charger', 'Charge two devices on the move.', '{"Output":"3.4A","Ports":"2x USB-A","Warranty":"2 years"}', (select id from categories where slug='wall-car-chargers'), 13.99, null, 'CAR34A', 90, false, false, false, 4.5, 75),
-  ('100W GaN 4-Port Desktop Charger', '100w-gan-4-port-desktop-charger', 'One charger for your whole desk.', '{"Power":"100W","Ports":"3x USB-C + 1x USB-A","Tech":"GaN","Warranty":"2 years"}', (select id from categories where slug='wall-car-chargers'), 59.99, 69.99, 'GAN100W4', 25, false, false, false, 4.8, 54),
-  ('10,000mAh Power Bank', '10-000mah-power-bank', 'Reliable everyday power bank with fast output.', '{"Capacity":"10000mAh","Output":"18W","Warranty":"2 years"}', (select id from categories where slug='power-banks'), 24.99, 29.99, 'PB10K', 140, false, true, false, 4.6, 260),
-  ('10,000mAh Wireless MagCharge Bank', '10-000mah-wireless-magcharge-bank', 'Magnetic wireless charging on the go.', '{"Capacity":"10000mAh","Wireless":"15W MagSafe-compatible","Warranty":"2 years"}', (select id from categories where slug='power-banks'), 39.99, null, 'PBMAG10K', 70, true, false, false, 4.7, 88),
-  ('5,000mAh Slim Power Bank', '5-000mah-slim-power-bank', 'Pocket-sized top-up power.', '{"Capacity":"5000mAh","Output":"15W","Warranty":"2 years"}', (select id from categories where slug='power-banks'), 19.99, null, 'PB5K', 110, false, false, false, 4.5, 130),
-  ('20,000mAh 65W Laptop Power Bank', '20-000mah-65w-laptop-power-bank', 'Laptop-class power you can carry.', '{"Capacity":"20000mAh","Output":"65W","Warranty":"2 years"}', (select id from categories where slug='power-banks'), 64.99, 79.99, 'PB20K65W', 0, false, false, true, 4.8, 77),
-  ('Bubble Bluetooth Speaker', 'bubble-bluetooth-speaker', 'Big sound from a compact, splash-resistant speaker.', '{"Connectivity":"Bluetooth 5.3","Battery":"12h","Warranty":"2 years"}', (select id from categories where slug='audio'), 34.99, 44.99, 'SPKBUB', 55, false, true, false, 4.6, 150),
-  ('Compact TWS Earbuds', 'compact-tws-earbuds', 'True wireless earbuds with a comfortable fit.', '{"Connectivity":"Bluetooth 5.3","Battery":"24h w/ case","Warranty":"2 years"}', (select id from categories where slug='audio'), 29.99, null, 'TWSEAR', 95, true, false, false, 4.5, 110),
-  ('Wired Earphones with Mic', 'wired-earphones-with-mic', 'Dependable wired earphones with in-line mic.', '{"Connector":"3.5mm","Mic":"Yes","Warranty":"2 years"}', (select id from categories where slug='audio'), 9.99, 12.99, 'WIRED35', 180, false, false, false, 4.3, 210),
-  ('Over-Ear ANC Headphones', 'over-ear-anc-headphones', 'Active noise cancelling for focus and travel.', '{"ANC":"Yes","Battery":"40h","Warranty":"2 years"}', (select id from categories where slug='audio'), 89.99, 99.99, 'ANCHP', 20, false, false, true, 4.7, 64),
-  ('Universal Car Vent Mount', 'universal-car-vent-mount', 'Secure your phone to any air vent.', '{"Mount":"Air vent","Fit":"Universal","Warranty":"2 years"}', (select id from categories where slug='mounts-holders'), 11.99, null, 'MNTVENT', 130, false, false, false, 4.4, 95),
-  ('MagSafe Desk Stand', 'magsafe-desk-stand', 'Magnetic desk stand for wireless charging.', '{"Mount":"Magnetic","Wireless":"15W","Warranty":"2 years"}', (select id from categories where slug='mounts-holders'), 22.99, 27.99, 'MNTMAG', 65, true, false, false, 4.6, 72),
-  ('Adjustable Aluminium Phone Stand', 'adjustable-aluminium-phone-stand', 'Sturdy aluminium stand with adjustable angles.', '{"Material":"Aluminium","Adjustable":"Yes","Warranty":"2 years"}', (select id from categories where slug='mounts-holders'), 14.99, null, 'MNTALU', 100, false, false, false, 4.5, 88),
-  ('Dashboard Suction Mount', 'dashboard-suction-mount', 'Strong suction mount for your dashboard.', '{"Mount":"Suction","Fit":"Universal","Warranty":"2 years"}', (select id from categories where slug='mounts-holders'), 9.99, null, 'MNTDASH', 0, false, false, false, 4.3, 45),
-  ('4-in-1 USB-C Hub', '4-in-1-usb-c-hub', 'Add HDMI, USB-A and more from a single port.', '{"Ports":"HDMI, 2x USB-A, USB-C PD","Warranty":"2 years"}', (select id from categories where slug='hubs-adapters'), 27.99, 34.99, 'HUB4IN1', 75, false, true, false, 4.6, 120),
-  ('USB-C to HDMI Adapter', 'usb-c-to-hdmi-adapter', 'Mirror or extend to a 4K display.', '{"Output":"4K HDMI","Connector":"USB-C","Warranty":"2 years"}', (select id from categories where slug='hubs-adapters'), 15.99, null, 'ADPHDMI', 85, false, false, false, 4.5, 70),
-  ('7-in-1 USB-C Docking Hub', '7-in-1-usb-c-docking-hub', 'A complete docking solution for your laptop.', '{"Ports":"HDMI, 3x USB-A, SD, microSD, USB-C PD","Warranty":"2 years"}', (select id from categories where slug='hubs-adapters'), 44.99, 54.99, 'HUB7IN1', 40, false, false, true, 4.7, 58),
-  ('USB-C to Ethernet Adapter', 'usb-c-to-ethernet-adapter', 'Reliable wired networking on the go.', '{"Speed":"Gigabit","Connector":"USB-C","Warranty":"2 years"}', (select id from categories where slug='hubs-adapters'), 17.99, null, 'ADPETH', 60, false, false, false, 4.5, 49),
-  ('Universal Stylus Pen', 'universal-stylus-pen', 'Precise stylus for tablets and phones.', '{"Compatibility":"Universal","Tip":"Fine","Warranty":"2 years"}', (select id from categories where slug='smart-accessories'), 18.99, 24.99, 'STYLUS', 90, true, false, false, 4.5, 66),
-  ('Smartwatch Charging Cable', 'smartwatch-charging-cable', 'Magnetic charging cable for popular smartwatches.', '{"Type":"Magnetic","Length":"1m","Warranty":"2 years"}', (select id from categories where slug='smart-accessories'), 12.99, null, 'SWCABLE', 110, false, false, false, 4.4, 54),
-  ('Wireless Video Doorbell', 'wireless-video-doorbell', 'See who''s at the door from anywhere.', '{"Video":"1080p","Connectivity":"Wi-Fi","Warranty":"2 years"}', (select id from categories where slug='smart-accessories'), 79.99, 99.99, 'DOORBELL', 15, false, true, true, 4.6, 40),
-  ('Smart Wi-Fi Plug (2-Pack)', 'smart-wi-fi-plug-2-pack', 'Control your devices from your phone.', '{"Connectivity":"Wi-Fi","Pack":"2","Warranty":"2 years"}', (select id from categories where slug='smart-accessories'), 21.99, null, 'WIFIPLUG2', 70, false, false, false, 4.5, 82)
+  ('Standard PD Cable USB-C to USB-C 1.2m', 'standard-pd-cable-usb-c-to-usb-c-1-2m', 'Soft-touch TPE USB-C to USB-C cable built for fast charging — kink-free, flexible and tangle-resistant for everyday use.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 12.99, null, 'GBP', null, 60, false, false, false, 4.6, 20),
+  ('Z-Series USB-C to USB-C PD Cable 1.2m', 'z-series-usb-c-to-usb-c-pd-cable-1-2m', 'USB-IF certified USB-C to USB-C cable with up to 60W Power Delivery for fast, safe charging and data sync.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 14.99, null, 'GBP', null, 80, false, true, false, 4.6, 27),
+  ('Z-Series Lightning to USB-C PD Cable 1.2m', 'z-series-lightning-to-usb-c-pd-cable-1-2m', 'MFi-style USB-C to Lightning cable — charge an iPhone from 0–50% in about 30 minutes with an 18W+ PD charger.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 14.99, null, 'GBP', null, 75, false, false, false, 4.6, 34),
+  ('Z-Series USB-C to USB-A Cable 1.2m', 'z-series-usb-c-to-usb-a-cable-1-2m', 'Durable double-braided USB-C to USB-A cable, USB-IF certified, supporting up to 15W charging.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 9.99, null, 'GBP', null, 120, false, false, false, 4.6, 41),
+  ('Z-Series Lightning to USB-A Cable 1.2m', 'z-series-lightning-to-usb-a-cable-1-2m', 'MFi-certified Lightning to USB-A cable for reliable charge and sync of iPhone and iPad.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 9.99, null, 'GBP', null, 110, false, false, false, 4.6, 48),
+  ('Z-Series USB-C to USB-A Cable XL 2m', 'z-series-usb-c-to-usb-a-cable-xl-2m', 'Extra-long 2m braided USB-C to USB-A cable — charge and sync with plenty of room to move.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"ZL2"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 14.99, null, 'GBP', 'ZL2', 70, false, false, false, 4.6, 55),
+  ('Z-Series USB-C to USB-C PD Cable XL 2m', 'z-series-usb-c-to-usb-c-pd-cable-xl-2m', '2m USB-C to USB-C cable with up to 60W Power Delivery, USB-IF certified for all your devices.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 19.99, null, 'GBP', null, 55, false, false, false, 4.6, 62),
+  ('MC3 High-Speed PD Cable USB-C 3.0 to USB-C', 'mc3-high-speed-pd-cable-usb-c-3-0', 'USB 3.0 data transfer at up to 5Gbps and up to 65W charging in one durable USB-C to USB-C cable.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"MC3"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 19.99, null, 'GBP', 'MC3', 50, false, false, false, 4.6, 69),
+  ('2-in-1 USB-C to iPhone / USB-C Cable', '2-in-1-usb-c-to-iphone-usb-c', 'One cable with both USB-C and Lightning heads — up to 60W PD to fast-charge iPhone and USB-C laptops.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 14.99, null, 'GBP', null, 65, false, false, false, 4.6, 76),
+  ('X-Series Braided USB-C to USB-A Cable', 'x-series-braided-usb-c-to-usb-a', 'Flat, tangle-free USB-C to USB-A cable supporting up to 2.4A output for everyday charging.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"X3"}'::jsonb, (select id from categories where slug='charging-cables'), 'Monarch Gadgets', 11.99, null, 'GBP', 'X3', 90, false, false, false, 4.6, 83),
+  ('MagSafe-3 Home Charger 65W', 'magsafe-3-home-charger-65w', 'MagSafe-3 to USB-C braided cable paired with a 65W USB-C charger for fast, safe MacBook charging.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 59.99, null, 'GBP', null, 0, false, false, false, 4.6, 90),
+  ('MagSafe-2 Home Charger 65W', 'magsafe-2-home-charger-65w', 'MagSafe-2 to USB-C cable with a 65W charger — a magnetic, fast-charging solution for older MacBooks.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 49, null, 'GBP', null, 0, false, false, false, 4.6, 97),
+  ('USB-C + USB-A GaN Home Charger 33W', 'usb-c-usb-a-gan-home-charger-33w', 'Compact GaN charger with USB-C (up to 30W) and USB-A ports for phones, tablets and gadgets.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CA33"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 19.99, null, 'GBP', 'CA33', 90, false, false, false, 4.6, 104),
+  ('Dual USB-C GaN Home Charger 45W', 'dual-usb-c-gan-home-charger-45w', '45W dual USB-C GaN charger with PD 3.0 and PPS for fast, safe charging of phones and laptops.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CC45"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 24.99, null, 'GBP', 'CC45', 70, false, true, false, 4.6, 111),
+  ('USB-C + USB-A Home Charger 20W', 'usb-c-usb-a-home-charger-20w', 'Dual-port 20W charger with USB-C and USB-A for versatile, everyday charging.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CA20"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 14.99, null, 'GBP', 'CA20', 130, false, false, false, 4.6, 118),
+  ('90W USB-C PD Home Charger (UK)', '90w-usb-c-pd-home-charger-uk', '90W USB-C PD charger — power a MacBook Pro or fast-charge phones, with built-in safety protection.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 49.99, null, 'GBP', null, 40, false, false, true, 4.6, 125),
+  ('65W USB-C PD Home Charger (UK)', '65w-usb-c-pd-home-charger-uk', '65W USB-C PD charger — charge a MacBook Pro 15" from 0–50% in about 60 minutes. Travel-friendly.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 39.99, null, 'GBP', null, 60, false, true, false, 4.6, 132),
+  ('45W USB-C PD Home Charger (UK)', '45w-usb-c-pd-home-charger-uk', '45W USB-C Power Delivery charger for fast, efficient charging of phones and tablets.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 29.99, null, 'GBP', null, 65, false, false, false, 4.6, 139),
+  ('30W USB-C PD Home Charger (UK)', '30w-usb-c-pd-home-charger-uk', '30W USB-C PD 3.0 charger — charge an iPhone 13 from 0–50% in about 30 minutes.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 85, true, false, false, 4.6, 146),
+  ('CC25 Dual USB Car Charger 4.8A', 'cc25-dual-usb-car-charger-4-8a', 'Dual-port car charger delivering up to 4.8A to keep two devices powered on the road.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CC25"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 17.99, null, 'GBP', 'CC25', 80, false, false, false, 4.6, 153),
+  ('CC10 Dual USB Car Charger 3.4A', 'cc10-dual-usb-car-charger-3-4a', 'Metal-body dual USB car charger with 3.4A combined output for reliable in-car charging.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CC2001"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 9.99, null, 'GBP', 'CC2001', 95, false, false, false, 4.6, 160),
+  ('10W PowerBase M1 Magnetic Wireless Charger', 'powerbase-m1-magnetic-wireless-charger', 'MagSafe-compatible 10W magnetic wireless charger for iPhone 12 and later — charge while you use it.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"M1"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 34.99, null, 'GBP', 'M1', 50, true, false, false, 4.6, 167),
+  ('18W PowerBase C2 Wireless Charging Pad', 'powerbase-c2-wireless-charging-pad', 'Fast 18W wireless charging pad — case-friendly up to 8mm; just lay your phone down to charge.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"C2"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 24.99, null, 'GBP', 'C2', 70, true, false, false, 4.6, 174),
+  ('15W PowerBase Q5 Wireless Charging Pad', 'powerbase-q5-wireless-charging-pad', 'Slim 15W Qi wireless charging pad compatible with all Qi-enabled phones and earbuds.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"Q5"}'::jsonb, (select id from categories where slug='wall-car-chargers'), 'Monarch Gadgets', 24.99, null, 'GBP', 'Q5', 65, false, false, false, 4.6, 181),
+  ('MAGBAR M8 Wireless Power Bank 8,000mAh', 'magbar-m8-8000mah', '8,000mAh MagSafe wireless power bank with 15W wireless and 15W USB-C output for on-the-go top-ups.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"M8"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 34.99, null, 'GBP', 'M8', 0, false, false, false, 4.6, 188),
+  ('EnergyBar P20 Power Bank 20,000mAh', 'energybar-p20-20000mah', '20,000mAh power bank with dual USB-C, USB-A and Micro-USB — charge up to four devices at once.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"P20"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 39.99, null, 'GBP', 'P20', 60, false, true, false, 4.6, 195),
+  ('EnergyBar T20 Power Bank 20,000mAh', 'energybar-t20-20000mah', 'High-capacity 20,000mAh power bank for days of extra battery when you''re away from a socket.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"T20"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 44.99, null, 'GBP', 'T20', 45, false, false, false, 4.6, 22),
+  ('EnergyBar A10 Power Bank 10,000mAh', 'energybar-a10-10000mah', '10,000mAh power bank with two USB-A and a USB-C port, adding up to 40 hours of extra battery.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"A10"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 24.99, null, 'GBP', 'A10', 0, false, false, false, 4.6, 29),
+  ('EnergyBar 5.0 Power Bank 5,000mAh', 'energybar-5-0-5000mah', 'Slim metal 5,000mAh power bank — pocket-sized top-up power with USB-C and Micro-USB.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 100, false, false, false, 4.6, 36),
+  ('Z10 EnergyBar Power Bank 10,000mAh', 'z10-energybar-10000mah', '10,000mAh power bank with built-in USB-C and Lightning cables plus a digital charge display.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"EnergyBarZ10"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 34.99, null, 'GBP', 'EnergyBarZ10', 0, false, false, false, 4.6, 43),
+  ('EnergyBar P10 Power Bank 10,000mAh', 'energybar-p10-10000mah', '10,000mAh PD power bank with two USB-C ports and USB-A for up to 20W fast charging.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"P10"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 29.99, null, 'GBP', 'P10', 80, false, false, false, 4.6, 50),
+  ('EnergyBar B20 Power Bank 20,000mAh', 'energybar-b20-20000mah', '20,000mAh PD power bank — charge three devices at once with USB-C and dual USB-A ports.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"B20"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 44.99, null, 'GBP', 'B20', 40, false, false, true, 4.6, 57),
+  ('W10 EnergyBar Pro Wireless Power Bank 10,000mAh', 'w10-energybar-pro-wireless-10000mah', '10,000mAh wireless + USB-C PD power bank — recharge your phone up to three times.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"W10"}'::jsonb, (select id from categories where slug='power-banks'), 'Monarch Gadgets', 34.99, null, 'GBP', 'W10', 0, false, false, false, 4.6, 64),
+  ('MX-101 Bubble Wireless Speaker', 'mx-101-bubble-wireless-speaker', 'Compact Bubble speaker with dynamic stereo sound, built-in mic and up to 5 hours of playtime.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"MX-101"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 24, 30, 'GBP', 'MX-101', 55, false, true, false, 4.6, 71),
+  ('T90U True Wireless Earbuds', 't90u-true-wireless-earbuds', 'All-weather true wireless earbuds with deep bass, touch controls and 25 hours total playtime.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"T90U"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 48.99, null, 'GBP', 'T90U', 60, true, false, true, 4.6, 78),
+  ('T6 True Wireless Earbuds', 't6-true-wireless-earbuds', 'True wireless earbuds with stereo calls and up to 21 hours of combined playtime.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"T6"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 49.99, null, 'GBP', 'T6', 0, false, false, false, 4.6, 85),
+  ('ME-08C USB-C Wired Earphones', 'me-08c-usb-c-wired-earphones', 'USB-C wired earphones with in-line mic and clear, balanced sound.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"ME-08C"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 14.99, null, 'GBP', 'ME-08C', 95, false, false, false, 4.6, 92),
+  ('ME-06 Wired Earphones', 'me-06-wired-earphones', '3.5mm wired earphones with 14mm drivers, enhanced bass and a tangle-free cable.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"ME-06"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 11.99, null, 'GBP', 'ME-06', 140, false, false, false, 4.6, 99),
+  ('H3 Stereo Wireless Headphones', 'h3-stereo-wireless-headphones', 'Foldable Bluetooth 5.0 over-ear headphones with cushioned earcups and up to 8 hours of playtime.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"H3"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 29, null, 'GBP', 'H3', 0, true, false, false, 4.6, 106),
+  ('DJ-BoomBox Wireless Speaker', 'dj-boombox-wireless-speaker', 'Big-sound portable Bluetooth boombox for parties indoors and out.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 99.99, null, 'GBP', null, 20, true, false, true, 4.6, 113),
+  ('DS-1531 Portable Wireless Speaker', 'ds-1531-portable-wireless-speaker', 'Portable speaker with Bluetooth, AUX, FM and microSD playback plus a hands-free mic.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"DS-1531"}'::jsonb, (select id from categories where slug='audio'), 'Monarch Gadgets', 25, 50, 'GBP', 'DS-1531', 0, false, false, false, 4.6, 120),
+  ('CM-304 Magnetic Air-Vent Car Mount', 'cm-304-magnetic-air-vent-mount', 'Ultra-strong magnetic air-vent car mount with 360° rotation for a secure, adjustable hold.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CM-304"}'::jsonb, (select id from categories where slug='mounts-holders'), 'Monarch Gadgets', 14.99, null, 'GBP', 'CM-304', 90, false, false, false, 4.6, 127),
+  ('18W CarMate MagSafe Car Vent Mount', '18w-carmate-magsafe-car-vent-mount', 'MagSafe wireless-charging car vent mount with fast, secure magnetic hold for iPhone.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"imG-10"}'::jsonb, (select id from categories where slug='mounts-holders'), 'Monarch Gadgets', 44.99, null, 'GBP', 'imG-10', 40, false, false, true, 4.6, 134),
+  ('CM-311 Car Air-Vent Magnet Mount', 'cm-311-car-air-vent-magnet-mount', 'Universal magnetic air-vent mount for hands-free, stable phone use while driving.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='mounts-holders'), 'Monarch Gadgets', 9.99, null, 'GBP', null, 110, false, false, false, 4.6, 141),
+  ('CM-201 Dashboard & Windshield Car Mount', 'cm-201-dashboard-windshield-car-mount', 'One-touch dashboard/windshield car mount with a reusable sticky gel pad and 360° rotation.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CM-201"}'::jsonb, (select id from categories where slug='mounts-holders'), 'Monarch Gadgets', 14.99, null, 'GBP', 'CM-201', 80, false, false, false, 4.6, 148),
+  ('18W CarMate M1 Wireless Charger & Car Mount', '18w-carmate-m1-wireless-charger-car-mount', 'Auto-clamp wireless charging car mount with up to 18W fast charging and one-hand mounting.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"CarMateM1"}'::jsonb, (select id from categories where slug='mounts-holders'), 'Monarch Gadgets', 34.99, null, 'GBP', 'CarMateM1', 45, false, false, false, 4.6, 155),
+  ('TM501 Tablet Car Mount', 'tm501-tablet-car-mount', 'Headrest tablet mount for 7"–10" devices with 360° rotation for comfortable back-seat viewing.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"MG-TM501"}'::jsonb, (select id from categories where slug='mounts-holders'), 'Monarch Gadgets', 14.99, null, 'GBP', 'MG-TM501', 60, false, false, false, 4.6, 162),
+  ('QUATRE 4-in-1 USB-C Multi-Port Hub', 'quatre-4in1-usb-c-multi-port', '4-in-1 USB-C hub with Gigabit Ethernet and 3× USB 3.0 at up to 10Gbps transfer speeds.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"PEC-CM020"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 44.99, null, 'GBP', 'PEC-CM020', 55, false, true, false, 4.6, 169),
+  ('OPTIMO 6-in-1 USB-C Multi-Port Hub', 'optimo-6in1-usb-c-multi-port', '6-in-1 USB-C hub with 4K HDMI, 2× USB-A, PD charging and SD/microSD card readers.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 39.99, null, 'GBP', null, 50, false, false, false, 4.6, 176),
+  ('ULTIMO 7-in-1 USB-C Multi-Port Hub', 'ultimo-7in1-usb-c-multi-port', '7-in-1 USB-C hub with 2.5Gb Ethernet, 4K HDMI, USB-A, PD charging and card readers.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 59.99, null, 'GBP', null, 35, false, false, true, 4.6, 183),
+  ('TRES 3-in-1 USB-C Multi-Port Hub', 'tres-3in1-usb-c-multi-port', 'Compact 3-in-1 USB-C hub with Thunderbolt 3, USB 3.0 and USB-A ports.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 70, false, false, false, 4.6, 190),
+  ('J1 USB-C to HDMI Adapter', 'j1-usb-c-to-hdmi-adapter', 'USB-C to HDMI adapter supporting up to 8K@60Hz and 4K@144Hz for laptops, tablets and consoles.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 85, false, false, false, 4.6, 197),
+  ('J2 USB-C to HDMI Cable 2m', 'j2-usb-c-to-hdmi-cable-2m', '2m USB-C to HDMI cable with up to 8K@60Hz plug-and-play video output.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 60, false, false, false, 4.6, 24),
+  ('J5 USB-C to Ethernet Adapter', 'j5-usb-c-to-ethernet-adapter', 'USB-C to Gigabit Ethernet adapter for stable wired networking on laptops and Chromebooks.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 0, false, false, false, 4.6, 31),
+  ('K8 HDMI to HDMI 8K Cable 2m', 'k8-hdmi-to-hdmi-8k-cable-2m', '2m HDMI cable supporting up to 8K resolution for crisp video and immersive sound.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"K8"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 14.99, null, 'GBP', 'K8', 70, false, false, false, 4.6, 38),
+  ('Ethernet Cable 10 Gbps 2m', 'ethernet-cable-10-gbps-2m', 'High-speed 2m Ethernet cable rated up to 10 Gbps for gaming and streaming.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='hubs-adapters'), 'Monarch Gadgets', 11.99, null, 'GBP', null, 90, true, false, false, 4.6, 45),
+  ('Wireless Video Doorbell', 'wireless-video-doorbell', 'Wireless doorbell — see and hear visitors from anywhere with an easy, no-wiring setup.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 40, false, true, false, 4.6, 52),
+  ('K10 Stylus Pen for iPad', 'k10-stylus-pen-for-ipad', 'Precise magnetic stylus pen for iPad with a fine tip and palm-friendly design.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"K10"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 29.99, null, 'GBP', 'K10', 75, true, false, false, 4.6, 59),
+  ('K503 Universal Stylus Pen', 'k503-universal-stylus-pen', 'Universal stylus pen for iOS and Android touchscreen devices.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"—"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 24.99, null, 'GBP', null, 60, false, false, false, 4.6, 66),
+  ('4-in-1 Multifunctional Stylus Pen', '4-in-1-multifunctional-pen', 'Multifunctional pen — stylus, ballpoint, phone stand and screen cleaner in one.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"JD963C"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 4.99, null, 'GBP', 'JD963C', 120, false, false, false, 4.6, 73),
+  ('Smart Watch USB-C Charging Cable', 'smart-watch-usb-c-charging-cable', 'Magnetic USB-C smartwatch charging cable with a secure, fully-sealed connection.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"X2-C"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 12.99, null, 'GBP', 'X2-C', 100, true, false, false, 4.6, 80),
+  ('World Travel Adapter Series X', 'world-travel-adapter-series-x', 'All-in-one world travel adapter for use across more than 150 countries.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"PD30W"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 29.99, null, 'GBP', 'PD30W', 0, false, false, false, 4.6, 87),
+  ('SIM Card Adapter Kit', 'sim-card-adapter-kit', 'SIM adapter kit with nano/micro/standard adapters, eject pin and a microSD card reader.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"KBL-001"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 9.99, null, 'GBP', 'KBL-001', 90, false, false, false, 4.6, 94),
+  ('Motion-Powered Running Light', 'motion-powered-running-light', 'Motion-powered, waterproof running light clip for night-time visibility — no batteries needed.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"OS-N001"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 19.99, null, 'GBP', 'OS-N001', 70, false, false, false, 4.6, 101),
+  ('6-in-1 Car Charger with Emergency Tool', '6-in-1-car-charger-emergency-tool', 'Car charger with LED torch, built-in power bank, seat-belt cutter and safety hammer.', '{"Brand":"Monarch Gadgets","Warranty":"2 years","SKU":"BM2198"}'::jsonb, (select id from categories where slug='smart-accessories'), 'Monarch Gadgets', 29.99, null, 'GBP', 'BM2198', 40, false, false, false, 4.6, 108)
 on conflict (slug) do nothing;
 
--- PRODUCT IMAGES — a distinct, category-relevant placeholder photo per product
--- (free stock imagery; replace with your own product photography before launch).
-with ranked as (
-  select p.id,
-         c.slug as cat,
-         row_number() over (partition by c.slug order by p.created_at, p.id) - 1 as rn
-  from products p
-  left join categories c on c.id = p.category_id
-)
 insert into product_images (product_id, url, alt, sort_order)
-select r.id,
-       case r.cat
-         when 'charging-cables'   then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Z-SERIESUSB-CTOUSB-C1.2M.png?v=1690885714',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/1.2A-C.png?v=1691395700',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Z-SERIESUSB-CTOIPHONE1.2M.png?v=1690885758',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/2mA-C.png?v=1691401185'])[(r.rn % 4) + 1]
-         when 'wall-car-chargers' then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/G453CC-01_6.png?v=1701423026',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/G303CA-01_6.png?v=1701423670',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/TP205CQ-01_6.png?v=1701422712',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/PD30_aa1f361e-34da-4f59-b40d-1e924c6e0b6a.png?v=1690807608'])[(r.rn % 4) + 1]
-         when 'power-banks'       then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/1031.839.png?v=1690798249',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802174933.jpg?v=1690980750',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802161901.jpg?v=1690975794',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802162041.jpg?v=1690974880'])[(r.rn % 4) + 1]
-         when 'audio'             then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/T90.jpg?v=1690184652',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230803153929.png?v=1691059342',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/H3.png?v=1652159827',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/lADPBbCc1UCLFxzNEsDNF3A_6000_4800.jpg?v=1571712841'])[(r.rn % 4) + 1]
-         when 'mounts-holders'    then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/CarMount304.jpg?v=1690546193',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/C9-F6.374.png?v=1690540986',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/14.png?v=1652159093',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/819BK_10.jpg?v=1571712841'])[(r.rn % 4) + 1]
-         when 'hubs-adapters'     then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230707143728.jpg?v=1690277562',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/06_2fbf809b-a6b9-4d73-a6e5-cc0d83e0c679.png?v=1652159178',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/J1_3.png?v=1652159189',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/03_3b85ebc4-54a4-4deb-a1f7-149cff003614.png?v=1652159193'])[(r.rn % 4) + 1]
-         when 'smart-accessories' then (array[
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/wirelessDoorBellb.png?v=1691481136',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/1.jpg?v=1691058488',
-           'https://cdn.shopify.com/s/files/1/2220/0245/files/smaeartwatchwithusb-C.jpg?v=1691489064',
-           'https://cdn.shopify.com/s/files/1/2220/0245/products/IMG-20170504-WA0007.jpg?v=1571712839'])[(r.rn % 4) + 1]
-         else '/placeholder.svg'
-       end,
-       p.title || ' product photo',
-       0
-from ranked r
-join products p on p.id = r.id
-where not exists (select 1 from product_images pi where pi.product_id = r.id);
+select p.id, v.url, p.title || ' product photo', 0
+from (values
+  ('standard-pd-cable-usb-c-to-usb-c-1-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/standardusb-ctocpdcable.png?v=1690807565'),
+  ('z-series-usb-c-to-usb-c-pd-cable-1-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Z-SERIESUSB-CTOUSB-C1.2M.png?v=1690885714'),
+  ('z-series-lightning-to-usb-c-pd-cable-1-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Z-SERIESUSB-CTOIPHONE1.2M.png?v=1690885758'),
+  ('z-series-usb-c-to-usb-a-cable-1-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/1.2A-C.png?v=1691395700'),
+  ('z-series-lightning-to-usb-a-cable-1-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/1.2A-i.png?v=1691396116'),
+  ('z-series-usb-c-to-usb-a-cable-xl-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/2mA-C.png?v=1691401185'),
+  ('z-series-usb-c-to-usb-c-pd-cable-xl-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Z-SERIESUSB-CTOUSB-C2M.png?v=1691135623'),
+  ('mc3-high-speed-pd-cable-usb-c-3-0', 'https://cdn.shopify.com/s/files/1/2220/0245/products/8_44ca3ae7-fa4e-4032-a8ab-c7d7fc0c92d0.png?v=1652159244'),
+  ('2-in-1-usb-c-to-iphone-usb-c', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230620141123.jpg?v=1691147721'),
+  ('x-series-braided-usb-c-to-usb-a', 'https://cdn.shopify.com/s/files/1/2220/0245/products/x-t.png?v=1571712841'),
+  ('magsafe-3-home-charger-65w', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Untitled_4.png?v=1701861466'),
+  ('magsafe-2-home-charger-65w', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Untitled_1.png?v=1701856814'),
+  ('usb-c-usb-a-gan-home-charger-33w', 'https://cdn.shopify.com/s/files/1/2220/0245/files/G303CA-01_6.png?v=1701423670'),
+  ('dual-usb-c-gan-home-charger-45w', 'https://cdn.shopify.com/s/files/1/2220/0245/files/G453CC-01_6.png?v=1701423026'),
+  ('usb-c-usb-a-home-charger-20w', 'https://cdn.shopify.com/s/files/1/2220/0245/files/TP205CQ-01_6.png?v=1701422712'),
+  ('90w-usb-c-pd-home-charger-uk', 'https://cdn.shopify.com/s/files/1/2220/0245/files/90WB.jpg?v=1690808561'),
+  ('65w-usb-c-pd-home-charger-uk', 'https://cdn.shopify.com/s/files/1/2220/0245/files/PD30_aa1f361e-34da-4f59-b40d-1e924c6e0b6a.png?v=1690807608'),
+  ('45w-usb-c-pd-home-charger-uk', 'https://cdn.shopify.com/s/files/1/2220/0245/files/PD30_34c37991-85c7-4263-915b-02890607c2c9.png?v=1690806988'),
+  ('30w-usb-c-pd-home-charger-uk', 'https://cdn.shopify.com/s/files/1/2220/0245/files/PD30.png?v=1690806773'),
+  ('cc25-dual-usb-car-charger-4-8a', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802175053.jpg?v=1690979299'),
+  ('cc10-dual-usb-car-charger-3-4a', 'https://cdn.shopify.com/s/files/1/2220/0245/products/car_charger_black.jpg?v=1571712841'),
+  ('powerbase-m1-magnetic-wireless-charger', 'https://cdn.shopify.com/s/files/1/2220/0245/products/06_3cf7e3a7-993a-4d74-8987-5f425a0b7ab9.png?v=1691044089'),
+  ('powerbase-c2-wireless-charging-pad', 'https://cdn.shopify.com/s/files/1/2220/0245/products/02.jpg?v=1688802585'),
+  ('powerbase-q5-wireless-charging-pad', 'https://cdn.shopify.com/s/files/1/2220/0245/files/q5.jpg?v=1688800505'),
+  ('magbar-m8-8000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230620141051.jpg?v=1691061064'),
+  ('energybar-p20-20000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802174933.jpg?v=1690980750'),
+  ('energybar-t20-20000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802161901.jpg?v=1690975794'),
+  ('energybar-a10-10000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230802162041.jpg?v=1690974880'),
+  ('energybar-5-0-5000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/58f7a2abc54d2c8742cfe0e59765ed75.png?v=1690889861'),
+  ('z10-energybar-10000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/1031.839.png?v=1690798249'),
+  ('energybar-p10-10000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230620143132.jpg?v=1690888244'),
+  ('energybar-b20-20000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230620143140.jpg?v=1689757519'),
+  ('w10-energybar-pro-wireless-10000mah', 'https://cdn.shopify.com/s/files/1/2220/0245/files/L1006PD-7.png?v=1690876930'),
+  ('mx-101-bubble-wireless-speaker', 'https://cdn.shopify.com/s/files/1/2220/0245/products/lADPBbCc1UCLFxzNEsDNF3A_6000_4800.jpg?v=1571712841'),
+  ('t90u-true-wireless-earbuds', 'https://cdn.shopify.com/s/files/1/2220/0245/files/T90.jpg?v=1690184652'),
+  ('t6-true-wireless-earbuds', 'https://cdn.shopify.com/s/files/1/2220/0245/products/Untitled_design_8_67cdfd2a-6c56-401d-9e1c-47c59e6b60fd.png?v=1571712843'),
+  ('me-08c-usb-c-wired-earphones', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230803153929.png?v=1691059342'),
+  ('me-06-wired-earphones', 'https://cdn.shopify.com/s/files/1/2220/0245/products/thumbnail_IMG_1648.png?v=1691058625'),
+  ('h3-stereo-wireless-headphones', 'https://cdn.shopify.com/s/files/1/2220/0245/products/H3.png?v=1652159827'),
+  ('dj-boombox-wireless-speaker', 'https://cdn.shopify.com/s/files/1/2220/0245/products/AP-G1974D02.png?v=1652159225'),
+  ('ds-1531-portable-wireless-speaker', 'https://cdn.shopify.com/s/files/1/2220/0245/products/wireless_speaker_dark_grey_3.jpg?v=1571712840'),
+  ('cm-304-magnetic-air-vent-mount', 'https://cdn.shopify.com/s/files/1/2220/0245/files/CarMount304.jpg?v=1690546193'),
+  ('18w-carmate-magsafe-car-vent-mount', 'https://cdn.shopify.com/s/files/1/2220/0245/files/C9-F6.374.png?v=1690540986'),
+  ('cm-311-car-air-vent-magnet-mount', 'https://cdn.shopify.com/s/files/1/2220/0245/products/14.png?v=1652159093'),
+  ('cm-201-dashboard-windshield-car-mount', 'https://cdn.shopify.com/s/files/1/2220/0245/products/819BK_10.jpg?v=1571712841'),
+  ('18w-carmate-m1-wireless-charger-car-mount', 'https://cdn.shopify.com/s/files/1/2220/0245/products/CC-60_-2.png?v=1688812918'),
+  ('tm501-tablet-car-mount', 'https://cdn.shopify.com/s/files/1/2220/0245/products/car_mount_tablet_8.jpg?v=1571712840'),
+  ('quatre-4in1-usb-c-multi-port', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230707143728.jpg?v=1690277562'),
+  ('optimo-6in1-usb-c-multi-port', 'https://cdn.shopify.com/s/files/1/2220/0245/products/02_75d9b701-5aee-4f62-8b9d-8843cb1503ae.png?v=1691136191'),
+  ('ultimo-7in1-usb-c-multi-port', 'https://cdn.shopify.com/s/files/1/2220/0245/products/06_2fbf809b-a6b9-4d73-a6e5-cc0d83e0c679.png?v=1652159178'),
+  ('tres-3in1-usb-c-multi-port', 'https://cdn.shopify.com/s/files/1/2220/0245/products/02_ebc700d2-4e5d-4a3b-b404-3edbc8412204.png?v=1652159187'),
+  ('j1-usb-c-to-hdmi-adapter', 'https://cdn.shopify.com/s/files/1/2220/0245/products/J1_3.png?v=1652159189'),
+  ('j2-usb-c-to-hdmi-cable-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/products/01_df941e4a-2fc7-45f3-b65c-322857d6e719.png?v=1690964655'),
+  ('j5-usb-c-to-ethernet-adapter', 'https://cdn.shopify.com/s/files/1/2220/0245/products/03_3b85ebc4-54a4-4deb-a1f7-149cff003614.png?v=1652159193'),
+  ('k8-hdmi-to-hdmi-8k-cable-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/files/k2.png?v=1691049418'),
+  ('ethernet-cable-10-gbps-2m', 'https://cdn.shopify.com/s/files/1/2220/0245/products/2methernet_1977e5f7-1ef5-481e-a9c2-8c85b726a0b0.png?v=1690962739'),
+  ('wireless-video-doorbell', 'https://cdn.shopify.com/s/files/1/2220/0245/files/wirelessDoorBellb.png?v=1691481136'),
+  ('k10-stylus-pen-for-ipad', 'https://cdn.shopify.com/s/files/1/2220/0245/files/1.jpg?v=1691058488'),
+  ('k503-universal-stylus-pen', 'https://cdn.shopify.com/s/files/1/2220/0245/products/06_c61454d8-2818-46e3-ac42-128f85fd6ca8.png?v=1691173244'),
+  ('4-in-1-multifunctional-pen', 'https://cdn.shopify.com/s/files/1/2220/0245/products/IMG-20170504-WA0007.jpg?v=1571712839'),
+  ('smart-watch-usb-c-charging-cable', 'https://cdn.shopify.com/s/files/1/2220/0245/files/smaeartwatchwithusb-C.jpg?v=1691489064'),
+  ('world-travel-adapter-series-x', 'https://cdn.shopify.com/s/files/1/2220/0245/files/Image_20230707144007.jpg?v=1690279921'),
+  ('sim-card-adapter-kit', 'https://cdn.shopify.com/s/files/1/2220/0245/products/Q32.jpg?v=1571712840'),
+  ('motion-powered-running-light', 'https://cdn.shopify.com/s/files/1/2220/0245/products/Untitled_design_12.jpg?v=1571712840'),
+  ('6-in-1-car-charger-emergency-tool', 'https://cdn.shopify.com/s/files/1/2220/0245/products/6_in_1_93812bdb-1d8e-4cef-acfc-0710acc7b54f.png?v=1571712839')
+) as v(slug, url)
+join products p on p.slug = v.slug
+where not exists (select 1 from product_images pi where pi.product_id = p.id);

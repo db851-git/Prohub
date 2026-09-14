@@ -54,7 +54,13 @@ the full flow.
 2. In the **SQL editor**, run the files in order:
    1. `supabase/schema.sql` — tables
    2. `supabase/rls.sql` — Row Level Security policies
-   3. `supabase/seed.sql` — 7 categories + ~28 demo products
+   3. `supabase/seed.sql` — 7 categories + the real Monarch Gadgets catalogue
+      (65 products with real titles, prices, descriptions and images)
+
+   Already have products loaded and just want to (re)import the catalogue?
+   Run `supabase/import_monarch.sql` instead — it replaces the products in place.
+   Both files are generated from `src/lib/monarch-catalogue.json`, the single
+   source of truth for the catalogue.
 3. Copy your project URL and keys into `.env.local`.
 4. (Auth) Enable **Email** auth in the Supabase dashboard. For local testing you
    may disable email confirmations.
